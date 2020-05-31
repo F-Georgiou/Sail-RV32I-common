@@ -75,6 +75,49 @@ module branch_predictor(
 	reg		branch_mem_sig_reg;
 
 	/*
+	 *	DSP for addition
+	 */ 
+
+	reg dsp_ce;
+        reg [15:0] dsp_c;
+        reg [15:0] dsp_a;
+        reg [15:0] dsp_b;
+        reg [15:0] dsp_d;
+
+        reg dsp_addsubtop;
+        reg dsp_addsubbot;
+
+        wire [31:0] dsp_o;
+        wire dsp_co;
+
+        SB_MAC16 i_sbmac16_branch
+                ( // port interfaces
+                        .A(dsp_a),
+                        .B(dsp_b),
+                        .C(dsp_c),
+                        .D(dsp_d),
+                        .O(dsp_o),
+                        .CLK(clk),
+                        .ADDSUBTOP(dsp_addsubtop),
+                        .ADDSUBBOT(dsp_addsubbot),
+                );
+
+        defparam i_sbmac16_branch.C_REG = 1'b0;
+        defparam i_sbmac16_branch.A_REG = 1'b0;
+        defparam i_sbmac16_branch.B_REG = 1'b0;
+        defparam i_sbmac16_branch.D_REG = 1'b0;
+
+        defparam i_sbmac16_branch.TOPOUTPUT_SELECT = 2'b00;
+        defparam i_sbmac16_branch.TOPADDSUB_LOWERINPUT = 2'b00;
+        defparam i_sbmac16_branch.TOPADDSUB_UPPERINPUT = 1'b1;
+        defparam i_sbmac16_branch.TOPADDSUB_CARRYSELECT = 2'b11;
+
+        defparam i_sbmac16_branch.BOTOUTPUT_SELECT = 2'b00;
+        defparam i_sbmac16_branch.BOTADDSUB_LOWERINPUT = 2'b00;
+        defparam i_sbmac16_branch.BOTADDSUB_UPPERINPUT = 1'b1;
+        defparam i_sbmac16_branch.BOTADDSUB_CARRYSELECT = 2'b00;
+
+	/*
 	 *	The `initial` statement below uses Yosys's support for nonzero
 	 *	initial values:
 	 *
@@ -105,6 +148,14 @@ module branch_predictor(
 		end
 	end
 
-	assign branch_addr = in_addr + offset;
+	assign dsp_c = in_addr[31:16];
+        assign dsp_a = offset[31:16];
+        assign dsp_d = in_addr[15:0];
+        assign dsp_b = offset[15:0];
+        assign dsp_addsubtop = 0;
+        assign dsp_addsubbot = 0;
+
+	assign branch_addr = dsp_o;
+	//assign branch_addr = in_addr + offset;
 	assign prediction = s[1] & branch_decode_sig;
 endmodule

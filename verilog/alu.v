@@ -68,21 +68,8 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
 	reg [15:0] add_a;
 	reg [15:0] add_b;
 	reg [15:0] add_d;
-	/*reg dsp_irsttop;
-	reg dsp_irstbot;
-	reg dsp_orsttop;
-	reg dsp_orstbot;
-	reg dsp_ahold;
-	reg dsp_bhold;
-	reg dsp_chold;
-	reg dsp_dhold;
-	reg dsp_oholdtop;
-	reg dsp_oholdbot;*/
 	reg add_addsubtop;
 	reg add_addsubbot;
-	/*reg dsp_oloadtop;
-	reg dsp_oloadbot;
-	reg dsp_ci;*/
 
 	wire [31:0] add_o;
 	wire add_co;
@@ -95,39 +82,14 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
                         .D(add_d),
                         .O(add_o),
                         .CLK(clk),
-                        /*.CE(dsp_ce),
-                        .IRSTTOP(dsp_irsttop),
-                        .IRSTBOT(dsp_irstbot),
-                        .ORSTTOP(dsp_orsttop),
-                        .ORSTBOT(dsp_orstbot),
-                        .AHOLD(dsp_ahold),
-                        .BHOLD(dsp_bhold),
-                        .CHOLD(dsp_chold),
-                        .DHOLD(dsp_dhold),
-                        .OHOLDTOP(dsp_oholdtop),
-                        .OHOLDBOT(dsp_oholdbot),
-                        .OLOADTOP(dsp_oloadtop),
-                        .OLOADBOT(dsp_oloadbot),*/
                         .ADDSUBTOP(add_addsubtop),
                         .ADDSUBBOT(add_addsubbot),
-                        /*.CO(dsp_co),
-                        .CI(dsp_ci),
-                        .ACCUMCI(),
-                        .ACCUMCO(),
-                        .SIGNEXTIN(),
-                        .SIGNEXTOUT()*/
                 );
 
-        //defparam i_sbmac16.NEG_TRIGGER = 1'b0;
         defparam i_sbmac16_add.C_REG = 1'b0;
         defparam i_sbmac16_add.A_REG = 1'b0;
         defparam i_sbmac16_add.B_REG = 1'b0;
         defparam i_sbmac16_add.D_REG = 1'b0;
-
-        //defparam i_sbmac16.TOP_8x8_MULT_REG = 1'b0;
-        //defparam i_sbmac16.BOT_8x8_MULT_REG = 1'b0;
-        //defparam i_sbmac16.PIPELINE_16x16_MULT_REG1 = 1'b0;
-        //defparam i_sbmac16.PIPELINE_16x16_MULT_REG2 = 1'b0;
 
         defparam i_sbmac16_add.TOPOUTPUT_SELECT = 2'b00;
         defparam i_sbmac16_add.TOPADDSUB_LOWERINPUT = 2'b00;
@@ -139,10 +101,6 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
         defparam i_sbmac16_add.BOTADDSUB_UPPERINPUT = 1'b1;
         defparam i_sbmac16_add.BOTADDSUB_CARRYSELECT = 2'b00;
 
-        //defparam i_sbmac16.MODE_8x8 = 1'b0;
-        //defparam i_sbmac16.A_SIGNED = 1'b0;
-        //defparam i_sbmac16.B_SIGNED = 1'b0;*/
-       //
 	reg sub_ce;
 	reg [15:0] sub_c;
 	reg [15:0] sub_a;
@@ -195,53 +153,8 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
 		ALUOut = 32'b0;
 		Branch_Enable = 1'b0;
 
-//		dsp_ce = 1;
 	end
 
-	/*always @(ALUctl)
-	begin
-		dsp_c <= A[31:16];
-                dsp_a <= B[31:16];
-                dsp_d <= A[15:0];
-		dsp_b <= B[15:0];
-		//dsp_irsttop <= 0;
-	        //dsp_irstbot <= 0;
- 	        //dsp_orsttop <= 0;
-	        //dsp_orstbot <= 0;
-	        //dsp_ahold <= 0;
-	        //dsp_bhold <= 0;
-	        //dsp_chold <= 0;
-	        //dsp_dhold <= 0;
-	        //dsp_oholdtop <= 0;
-	        //dsp_oholdbot <= 0;
-	        dsp_addsubtop <= 0;
-	        dsp_addsubbot <= 0;
-	        //dsp_oloadtop <= 0;
-	        //dsp_oloadbot <= 0;
-	        //dsp_ci <= 0;
-		
-		case (ALUctl[3:0])
-			`kSAIL_MICROARCHITECTURE_ALUCTL_3to0_ADD: 	begin
-										dsp_addsubtop <= 0;
-										dsp_addsubbot <= 0;
-									end
-
-			`kSAIL_MICROARCHITECTURE_ALUCTL_3to0_SUB: 	begin
-										dsp_addsubtop <= 1;
-										dsp_addsubbot <= 1;
-									end
-		endcase
-	end*/
-
- /*       always @(posedge clk) begin
-		dsp_c <= A[31:16];
-                dsp_a <= B[31:16];
-                dsp_d <= A[15:0];
-                dsp_b <= B[15:0];
-                dsp_addsubtop <= 0;
-                dsp_addsubbot <= 0;
-	end
-*/
 	always @(ALUctl, A, B) begin
 		add_c <= A[31:16];
                 add_a <= B[31:16];
