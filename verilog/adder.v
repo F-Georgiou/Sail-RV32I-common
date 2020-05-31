@@ -45,10 +45,60 @@
 
 
 
-module adder(input1, input2, out);
+module adder(input1, input2, out, clk);
+	input clk;
 	input [31:0]	input1;
 	input [31:0]	input2;
 	output [31:0]	out;
 
-	assign		out = input1 + input2;
+	reg dsp_ce;
+        reg [15:0] dsp_c;
+        reg [15:0] dsp_a;
+        reg [15:0] dsp_b;
+        reg [15:0] dsp_d;
+
+	reg dsp_addsubtop;
+        reg dsp_addsubbot;
+
+	wire [31:0] dsp_o;
+        wire dsp_co;
+
+	SB_MAC16 i_sbmac16_adder
+                ( // port interfaces
+                        .A(dsp_a),
+                        .B(dsp_b),
+                        .C(dsp_c),
+                        .D(dsp_d),
+                        .O(dsp_o),
+                        .CLK(clk),
+			.ADDSUBTOP(dsp_addsubtop),
+                        .ADDSUBBOT(dsp_addsubbot),
+		);
+
+	defparam i_sbmac16_adder.C_REG = 1'b0;
+        defparam i_sbmac16_adder.A_REG = 1'b0;
+        defparam i_sbmac16_adder.B_REG = 1'b0;
+        defparam i_sbmac16_adder.D_REG = 1'b0;
+
+        defparam i_sbmac16_adder.TOPOUTPUT_SELECT = 2'b00;
+        defparam i_sbmac16_adder.TOPADDSUB_LOWERINPUT = 2'b00;
+        defparam i_sbmac16_adder.TOPADDSUB_UPPERINPUT = 1'b1;
+        defparam i_sbmac16_adder.TOPADDSUB_CARRYSELECT = 2'b11;
+
+        defparam i_sbmac16_adder.BOTOUTPUT_SELECT = 2'b00;
+        defparam i_sbmac16_adder.BOTADDSUB_LOWERINPUT = 2'b00;
+        defparam i_sbmac16_adder.BOTADDSUB_UPPERINPUT = 1'b1;
+        defparam i_sbmac16_adder.BOTADDSUB_CARRYSELECT = 2'b00;
+
+	assign dsp_c = input1[31:16];
+        assign dsp_a = input2[31:16];
+        assign dsp_d = input1[15:0];
+        assign dsp_b = input2[15:0];
+	assign dsp_addsubtop = 0;
+	assign dsp_addsubbot = 0;
+
+
+	assign		out = dsp_o;
+
+/*	assign		out = input1 + input2;*/
 endmodule
