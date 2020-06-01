@@ -138,7 +138,7 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
         defparam i_sbmac16_sub.BOTOUTPUT_SELECT = 2'b00;
         defparam i_sbmac16_sub.BOTADDSUB_LOWERINPUT = 2'b00;
         defparam i_sbmac16_sub.BOTADDSUB_UPPERINPUT = 1'b1;
-        defparam i_sbmac16_sub.BOTADDSUB_CARRYSELECT = 2'b00;
+        defparam i_sbmac16_sub.BOTADDSUB_CARRYSELECT = 2'b01;
 
 	/*
 	 *	This uses Yosys's support for nonzero initial values:
@@ -163,10 +163,10 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
                 add_addsubtop <= 0;
                 add_addsubbot <= 0;
 
-		sub_c <= A[31:16];
-                sub_a <= B[31:16];
-                sub_d <= A[15:0];
-                sub_b <= B[15:0];
+		sub_c <= B[31:16];
+                sub_a <= A[31:16];
+                sub_d <= B[15:0];
+                sub_b <= A[15:0];
                 sub_addsubtop <= 1;
                 sub_addsubbot <= 1;
 
