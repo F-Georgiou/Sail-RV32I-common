@@ -101,7 +101,7 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
         defparam i_sbmac16_add.BOTADDSUB_UPPERINPUT = 1'b1;
         defparam i_sbmac16_add.BOTADDSUB_CARRYSELECT = 2'b00;
 
-	reg sub_ce;
+	/*reg sub_ce;
 	reg [15:0] sub_c;
 	reg [15:0] sub_a;
 	reg [15:0] sub_b;
@@ -138,7 +138,7 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
         defparam i_sbmac16_sub.BOTOUTPUT_SELECT = 2'b00;
         defparam i_sbmac16_sub.BOTADDSUB_LOWERINPUT = 2'b00;
         defparam i_sbmac16_sub.BOTADDSUB_UPPERINPUT = 1'b1;
-        defparam i_sbmac16_sub.BOTADDSUB_CARRYSELECT = 2'b01;
+        defparam i_sbmac16_sub.BOTADDSUB_CARRYSELECT = 2'b00;*/
 
 	/*
 	 *	This uses Yosys's support for nonzero initial values:
@@ -163,12 +163,12 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
                 add_addsubtop <= 0;
                 add_addsubbot <= 0;
 
-		sub_c <= B[31:16];
+/*		sub_c <= B[31:16];
                 sub_a <= A[31:16];
                 sub_d <= B[15:0];
                 sub_b <= A[15:0];
                 sub_addsubtop <= 1;
-                sub_addsubbot <= 1;
+                sub_addsubbot <= 1;*/
 
 
 		case (ALUctl[3:0])              		
@@ -188,7 +188,7 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
 			`kSAIL_MICROARCHITECTURE_ALUCTL_3to0_ADD:	begin
 										//dsp_addsubtop <= 0;
 										//dsp_addsubbot <= 0;
-										ALUOut <= add_o;
+										ALUOut = add_o;
 										//ALUOut = A + B;
 									end
 
@@ -198,8 +198,8 @@ module alu(ALUctl, A, B, ALUOut, Branch_Enable, input clk);
 			`kSAIL_MICROARCHITECTURE_ALUCTL_3to0_SUB:	begin
 										//dsp_addsubtop <= 1;
 										//dsp_addsubbot <= 1;
-										ALUOut <= sub_o;
-										//ALUOut = A - B;
+										//ALUOut = ~sub_o;
+										ALUOut = A - B;
 									end
 
 			/*
